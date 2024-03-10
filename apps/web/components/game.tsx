@@ -194,7 +194,7 @@ export default function Game({ gameId, name }: GameProps) {
           <div className="flex flex-col items-center justify-center p-10">
             <h1 className="text-2xl font-bold text-center">
               Game finished!
-              {ioInstance?.id === host && " Restart the game fresh!"}
+              {ioInstance?.id === host && " Start a fresh game!"}
             </h1>
 
             {host === ioInstance?.id && (
