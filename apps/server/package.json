@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./build/index.js",
     "dev": "nodemon index.ts",
-    "build": "tsc"
+    "build": "pnpm i socket.io && pnpm i --save-dev @types/node && tsc"
   },
   "keywords": [],
   "author": "",

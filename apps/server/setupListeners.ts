@@ -1,11 +1,11 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { Game } from "./classes/game";
 
 // This keeps a track of all the rooms. And when someone wants to join the room we just search for the roomID in this map in O(1) and fetch the game associated with it.
 export const rooms = new Map<string, Game>();
 
 export function setupListeners(io: Server) {
-  io.on("connection", (socket) => {
+  io.on("connection", (socket: Socket) => {
     console.log(`New connection - ${socket.id}`);
 
     socket.on("join-game", (roomId: string, name: string) => {
