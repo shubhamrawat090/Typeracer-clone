@@ -135,7 +135,7 @@ export class Game {
     this.io.to(this.gameId).emit("player-joined", { id, name, score: 0 });
 
     // Helps the curr player keep a track of all the players
-    socket.emit("player", this.players);
+    socket.emit("players", this.players);
     // Updates the host of the current game
     socket.emit("new-host", this.gameHost);
 
