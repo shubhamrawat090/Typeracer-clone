@@ -15,6 +15,8 @@ export default function Game({ gameId, name }: GameProps) {
   const [paragraph, setParagraph] = useState<string>("");
   const [host, setHost] = useState<string>("");
   const [inputParagraph, setInputParagraph] = useState<string>("");
+  const [showCopied, setShowCopied] = useState(false);
+  const [showCode, setShowCode] = useState(false);
 
   useEffect(() => {
     const socket = io(process.env.NEXT_PUBLIC_WEBSOCKET_URL as string, {
@@ -133,12 +135,57 @@ export default function Game({ gameId, name }: GameProps) {
   };
 
   return (
-    <div className="w-screen p-10 grid grid-cols-1 lg:grid-cols-3 gap-20">
+    <div className="w-screen p-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
       {/* Leaderboard */}
       <div className="w-full order-last lg:order-first">
-        <h2 className="text-2xl front-medium mb-10 mt-10 lg:mt-0">
-          Leaderboard
-        </h2>
+        <h2 className="text-2xl font-medium mt-10 lg:mt-0">Leaderboard</h2>
+        <div className="flex items-stretch my-5 shadow-[0_0_5px_rgb(255,255,255)] rounded-sm">
+          <div
+            className="flex-1 flex items-center justify-center"
+            onMouseEnter={() => setShowCode(true)}
+            onMouseLeave={() => setShowCode(false)}
+          >
+            {!showCode && (
+              <p className="text-sm font-medium">
+                Hover over me to see the invite code!
+              </p>
+            )}
+            {showCode && <p className="text-sm font-extralight">{gameId}</p>}
+          </div>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(gameId);
+              // We show the copied tooltip for 1 second
+              setShowCopied(true);
+              setTimeout(() => {
+                setShowCopied(false);
+              }, 1000);
+            }}
+            className="px-4 py-2 relative"
+            title="Click to copy the invite code"
+          >
+            {showCopied && (
+              <div className="absolute top-[-70%] left-[-10%] text-xs border bg-blue-500 px-2 py-1">
+                COPIED
+              </div>
+            )}
+            <svg
+              viewBox="0 0 16 16"
+              fill="currentColor"
+              height="1em"
+              width="1em"
+            >
+              <path
+                fillRule="evenodd"
+                d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"
+              />
+              <path
+                fillRule="evenodd"
+                d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"
+              />
+            </svg>
+          </button>
+        </div>
         <div className="flex flex-col gap-5 w-full">
           {/* sort players based on score and map */}
           {players
@@ -148,6 +195,7 @@ export default function Game({ gameId, name }: GameProps) {
                 key={player.id}
                 player={player}
                 rank={index + 1}
+                host={host}
               />
             ))}
         </div>
