@@ -196,6 +196,7 @@ export default function Game({ gameId, name }: GameProps) {
                 player={player}
                 rank={index + 1}
                 host={host}
+                you={player.id === ioInstance?.id}
               />
             ))}
         </div>
